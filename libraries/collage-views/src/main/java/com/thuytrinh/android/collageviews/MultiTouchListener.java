@@ -3,6 +3,8 @@ package com.thuytrinh.android.collageviews;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 public class MultiTouchListener implements OnTouchListener {
 
@@ -68,11 +70,13 @@ public class MultiTouchListener implements OnTouchListener {
       return false;
     }
     Boolean reachedEdge = true;
-    int viewRight = v.getRight();
-    int viewLeft = v.getLeft();
+    int adjustedWidth = (int) ((v.getWidth() * v.getScaleX() - v.getWidth()) / 2.f);
+    int viewLeft = v.getLeft() - adjustedWidth;
+    int viewRight = v.getRight() + adjustedWidth;
     View p = (View) v.getParent();
-    int pRight = p.getRight();
-    int pLeft = p.getLeft();
+    ViewGroup.MarginLayoutParams pLayoutParams = (ViewGroup.MarginLayoutParams) p.getLayoutParams();
+    int pLeft = p.getLeft() - pLayoutParams.leftMargin;
+    int pRight = p.getRight() - pLayoutParams.leftMargin - pLayoutParams.rightMargin;
     float newViewRight = viewRight + newTransX;
     float newViewLeft = viewLeft + newTransX;
     //checks if the view has reached the boundaries of its parent
@@ -87,11 +91,13 @@ public class MultiTouchListener implements OnTouchListener {
       return false;
     }
     Boolean reachedEdge = true;
-    int viewTop = v.getTop();
-    int viewBottom = v.getBottom();
+    int adjustedHeight = (int) ((v.getHeight() * v.getScaleY() - v.getHeight()) / 2.f);
+    int viewTop = v.getTop() - adjustedHeight;
+    int viewBottom = v.getBottom() + adjustedHeight;
     View p = (View) v.getParent();
-    int parentTop = p.getTop();
-    int parentBottom = p.getBottom();
+    ViewGroup.MarginLayoutParams pLayoutParams = (ViewGroup.MarginLayoutParams) p.getLayoutParams();
+    int parentTop = p.getTop() - pLayoutParams.topMargin;
+    int parentBottom = p.getBottom() - pLayoutParams.topMargin - pLayoutParams.bottomMargin;
     float newViewTop = viewTop + newTransY;
     float newViewBottom = viewBottom + newTransY;
     //checks if the view has reached the boundaries of its parent
